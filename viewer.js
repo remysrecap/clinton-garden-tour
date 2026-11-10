@@ -18,7 +18,7 @@ function finish(key,color,geo){
     geo.setAttribute('uv',new THREE.Float32BufferAttribute([a,0,b,0,b,1,a,1],2));
     return new THREE.MeshBasicMaterial({map:texture('front-street.jpg'),toneMapped:false});
  }
- const m=new THREE.MeshStandardMaterial({color:'#'+color,roughness:.76,flatShading:false});
+ const m=key==='Frosted bedroom glass'?new THREE.MeshPhysicalMaterial({color:0xe3e9e5,transmission:.92,roughness:.48,thickness:.008,ior:1.47}):new THREE.MeshStandardMaterial({color:'#'+color,roughness:.76,flatShading:false});
  let sx=1,sy=1;
  if(timber.includes(key)){m.map=texture('hardwood2_diffuse.jpg');m.bumpMap=texture('hardwood2_bump.jpg',false);m.roughnessMap=texture('hardwood2_roughness.jpg',false);m.roughness=.68;m.bumpScale=.009;sx=3.2;sy=1.58;m.color.set(key==='walnut'?0x83674f:key==='honey'?0xe8c598:0xfff3dc)}
  else if(cloth.includes(key)){m.map=texture('weave.png');m.bumpMap=m.map;m.bumpScale=.0022;sx=sy=.32}
@@ -34,6 +34,8 @@ function finish(key,color,geo){
  if(['taupe','rugIvory','striped','ochreThrow','cane'].includes(key)){m.map=texture('weave.png');m.bumpMap=m.map;m.bumpScale=.0017;sx=sy=.27}
  const scanned={saddle:'brown_leather',brick:'brown_brick_02',whitebrick:'pale-brick',oak:'wood_floor',lightoak:'wood_floor'}[key];
  if(scanned){const source=scanned==='pale-brick'?'painted_brick':scanned;m.map=texture(scanned+'_Diffuse.jpg');m.normalMap=texture(source+'_nor_gl.jpg',false);m.normalScale.set(.65,.65);m.roughnessMap=texture(source+'_Rough.jpg',false);m.bumpMap=null;m.color.set(0xffffff);sx=sy=key==='brick'?1.16:key==='whitebrick'?1.9:key==='saddle'?.62:1.55}
+ if(key.startsWith('Pothos') || key==='Leaf rib'){m.side=THREE.DoubleSide;m.roughness=.42}
+ if(key==='Hall deep teal'){m.bumpMap=texture('hardwood2_bump.jpg',false);m.bumpScale=.00019;m.roughness=.72;sx=sy=.07}
  if(key==='clearPane'){m.color.set(0xdceae9);m.transparent=true;m.opacity=.11;m.depthWrite=false;m.roughness=.08}
  if(m.map){const verts=geo.attributes.position,norm=geo.attributes.normal,uv=[];for(let i=0;i<verts.count;i++){const x=verts.getX(i),y=verts.getY(i),z=verts.getZ(i),up=Math.abs(norm.getY(i))>.65;if(up&&['oak','lightoak'].includes(key)){uv.push(z/sy,x/sx);continue}uv.push((up||Math.abs(norm.getZ(i))>Math.abs(norm.getX(i))?x:z)/sx,(up?z:y)/sy)}geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2))}
  if(key.startsWith('whiteOak')){
