@@ -36,6 +36,12 @@ function finish(key,color,geo){
  if(scanned){const source=scanned==='pale-brick'?'painted_brick':scanned;m.map=texture(scanned+'_Diffuse.jpg');m.normalMap=texture(source+'_nor_gl.jpg',false);m.normalScale.set(.65,.65);m.roughnessMap=texture(source+'_Rough.jpg',false);m.bumpMap=null;m.color.set(0xffffff);sx=sy=key==='brick'?1.16:key==='whitebrick'?1.9:key==='saddle'?.62:1.55}
  if(key==='clearPane'){m.color.set(0xdceae9);m.transparent=true;m.opacity=.11;m.depthWrite=false;m.roughness=.08}
  if(m.map){const verts=geo.attributes.position,norm=geo.attributes.normal,uv=[];for(let i=0;i<verts.count;i++){const x=verts.getX(i),y=verts.getY(i),z=verts.getZ(i),up=Math.abs(norm.getY(i))>.65;if(up&&['oak','lightoak'].includes(key)){uv.push(z/sy,x/sx);continue}uv.push((up||Math.abs(norm.getZ(i))>Math.abs(norm.getX(i))?x:z)/sx,(up?z:y)/sy)}geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2))}
+ if(key.startsWith('whiteOak')){
+    m.color.set(0xffffff);m.map=texture('natural-oak.jpg');m.map.wrapS=m.map.wrapT=THREE.MirroredRepeatWrapping;m.roughness=.51;
+    const pos=geo.attributes.position,norm=geo.attributes.normal,uv=[];
+    for(let i=0;i<pos.count;i++){const x=pos.getX(i),y=pos.getY(i),z=pos.getZ(i);uv.push(...(key==='whiteOakVertical'?[y/.76,(x-z)/.36]:[x,(Math.abs(norm.getY(i))>.5?-z:y)/.43]))}
+    geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+ }
  return m
 }
 
