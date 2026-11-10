@@ -6,6 +6,8 @@ scene.background=new THREE.Color(0xe8e5db);
 scene.add(new THREE.HemisphereLight(0xfff9e7,0xd5dcd8,1.52));
 const sun=new THREE.DirectionalLight(0xffedcc,2.4);sun.position.set(-13,7,-3);sun.castShadow=true;
 Object.assign(sun.shadow.camera,{left:-13,right:13,top:12,bottom:-12});sun.shadow.mapSize.set(2048,2048);sun.shadow.bias=-.0002;sun.shadow.normalBias=.015;scene.add(sun);
+const gardenBeam=new THREE.SpotLight(0xffe3bb,17,5,.34,.24,2);
+gardenBeam.position.set(6.31,1.80,1.11);gardenBeam.target.position.set(3.84,.13,1.36);gardenBeam.castShadow=true;gardenBeam.shadow.bias=-.0002;scene.add(gardenBeam,gardenBeam.target);
 renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.38;
 const loader=new THREE.TextureLoader(),cache={};
 function texture(file,color=true){
